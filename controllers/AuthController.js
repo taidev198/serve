@@ -36,10 +36,10 @@ const register = (req,res,next) =>{
 
 const login = (req,res,next) =>{
     
-    var username = req.body.fullname;
-    var password = req.body.id_department;
+    var id = req.body.fullname;
+    var password = req.body.password;
 
-    User.findOne({"fullname": username})
+    User.findOne({"fullname": id})
     .then(user =>{
         if(user){
             console.log(user);
@@ -49,7 +49,7 @@ const login = (req,res,next) =>{
             //             error: err
             //         })
             //     }})
-                if(password == user.id_department){
+                if(password == user.password){
                     let token = jwt.sign({name: user.name}, 'AzQ,PI)0(',{expiresIn:'1h'})
                     res.json({
                         message: 'login sucessfully',
@@ -84,7 +84,7 @@ const update = (req, res, next) => {
 
 //get all users from id_department
 const getUserOfDepart = (req, res, next) => {
-    const { id } = req.query;
+    const id = req.body.id;
     console.log(id);
     User.
     find({ id_department: id }, function (err, users) {
