@@ -82,6 +82,18 @@ const update = (req, res, next) => {
        });
 }
 
+const deleteUser = (req, res, next) => {
+    var fullname =  req.body.fullname;
+    
+    User.findOneAndDelete({"fullname" : fullname},function (err, user) {
+        if (err) {
+         err.type = 'database';
+         callback(err);
+        }
+        res.json(user)
+       });
+}
+
 //get all users from id_department
 const getUserOfDepart = (req, res, next) => {
     const id = req.body.id;
@@ -95,4 +107,4 @@ const getUserOfDepart = (req, res, next) => {
       });
 }
 
-module.exports = {register,login , update, getUserOfDepart}
+module.exports = {register,login , update, deleteUser, getUserOfDepart}
