@@ -71,9 +71,12 @@ const login = (req,res,next) =>{
 }
 
 const update = (req, res, next) => {
-    var filter = {_id: req.body.id}
-    req.body.name = "456"
-    User.findOneAndUpdate(filter, {"name" :req.body.name},function (err, user) {
+    User.findOneAndUpdate({"id" :req.body.id},{             "fullname" :req.body.fullname,
+                                                            "address" : req.body.address,
+                                                             "avatar" : req.body.avatar,
+                                                              "bỉrth" : req.body.bỉrth,
+                                                              "gender" : req.body.gender
+                                                            },function (err, user) {
         if (err) {
          err.type = 'database';
          callback(err);
@@ -90,7 +93,9 @@ const deleteUser = (req, res, next) => {
          err.type = 'database';
          callback(err);
         }
-        res.json(user)
+        res.json({
+            message:'Success'
+        })
        });
 }
 
