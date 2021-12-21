@@ -36,10 +36,10 @@ const register = (req,res,next) =>{
 
 const login = (req,res,next) =>{
     
-    var id = req.body.fullname;
+    var id = req.body.id;
     var password = req.body.password;
 
-    User.findOne({"fullname": id})
+    User.findOne({"id": id})
     .then(user =>{
         if(user){
             console.log(user);
@@ -51,6 +51,7 @@ const login = (req,res,next) =>{
             //     }})
                 if(password == user.password){
                     let token = jwt.sign({name: user.name}, 'AzQ,PI)0(',{expiresIn:'1h'})
+                    user._id = user.id
                     res.json({
                         message: 'login sucessfully',
                         token,
@@ -71,18 +72,29 @@ const login = (req,res,next) =>{
 }
 
 const update = (req, res, next) => {
-    User.findOneAndUpdate({"id" :req.body.id},{             "fullname" :req.body.fullname,
-                                                            "address" : req.body.address,
-                                                             "avatar" : req.body.avatar,
-                                                              "bỉrth" : req.body.bỉrth,
-                                                              "gender" : req.body.gender
-                                                            },function (err, user) {
-        if (err) {
-         err.type = 'database';
-         callback(err);
-        }
-        res.json(user)
-       });
+
+    User.findOne({ "id": "fvbsfbv" })
+    .then((u) => {
+      res.json(u);
+    })
+    .catch((error) => {
+      res.json({
+        message: "An error occur",
+      });
+    });
+
+    // User.updateOne({"id" :req.body.id},{$set:{             "fullname" :req.body.fullname,
+    //                                                         "address" : req.body.address,
+    //                                                          "avatar" : req.body.avatar,
+    //                                                           "bỉrth" : req.body.bỉrth,
+    //                                                           "gender" : req.body.gender
+    //                                                         }},function (err, user) {
+    //     if (err) {
+    //      err.type = 'database';
+    //      callback(err);
+    //     }
+    //     res.json(user)
+    //    });
 }
 
 const deleteUser = (req, res, next) => {

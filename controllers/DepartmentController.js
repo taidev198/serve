@@ -48,23 +48,43 @@ const getRule = (req,res, next) => {
 }
 
 const addRule = (req,res, next) => {
-    let rule = new Rule({
-        id: 1,
-        start_date:req.body.start_date,
-        end_date:req.body.end_date,
-        start_time:req.body.start_time,
-        end_time:req.body.end_time,
-        fines:req.body.fines
-    });
-    rule.save()
-    .then(rule =>{
+    Rule.findOne({"id": 1}).then( (r) => {
+        if(r) {
+            Rule.updateOne({"id" :1 },{$set:{             "start_date" :req.body.start_date,
+                                                            "end_date" : req.body.end_date,
+                                                             "start_time" : req.body.start_time,
+                                                              "end_time" : req.body.end_time,
+                                                              "fines" : req.body.fines
+                                                            }},function (err, rule) {
+        if (err) {
+         err.type = 'database';
+         callback(err);
+        }
         res.json(rule)
-    })
-    .catch(err =>{
-        res.json({
-            message: 'An error occur'
-        })
-    });
+       });
+        }
+        else {
+            let rule = new Rule({
+                id: 1,
+                start_date:req.body.start_date,
+                end_date:req.body.end_date,
+                start_time:req.body.start_time,
+                end_time:req.body.end_time,
+                fines:req.body.fines
+            });
+            rule.save()
+            .then(rule =>{
+                res.json(rule)
+            })
+            .catch(err =>{
+                res.json({
+                    message: 'An error occur'
+                })
+            });
+        }
+         });
+
+   
 }
 
 

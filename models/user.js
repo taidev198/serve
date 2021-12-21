@@ -4,14 +4,14 @@ mongoose.set('useCreateIndex', true);
 
 const UserSchema = new Schema({
     id: {
-        type:mongoose.ObjectId,
-      unique: true, index: true
-    },
+        type: String
+    }
+    ,
     fullname:{
         type:String
     },
     birth:{
-        type:String,
+        type: String
        // index: true, unique: true, required: true
     },
     address:{
@@ -21,6 +21,14 @@ const UserSchema = new Schema({
     id_department:{
         type:Number
     },
+    isCheckin: {
+        type: Boolean
+    },
+
+    isCheckout: {
+        type: Boolean
+    },
+    
     late_date: {
         type: Array, default: new Date() 
     },
