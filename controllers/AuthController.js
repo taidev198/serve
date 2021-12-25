@@ -1,6 +1,6 @@
 const User = require('../models/user.js');
 const Department = require('../models/department.js');
-
+const Admin = require('../models/admin.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -71,6 +71,70 @@ const login = (req,res,next) =>{
     })
 }
 
+
+const loginAdmin = (req,res,next) =>{
+    
+    var username = req.body.username;
+    var password = req.body.password;
+    console.log(username);
+    Admin.findOne({"username": username})
+    .then(user =>{
+        if(user){
+            console.log(user);
+            // bcrypt.compare(password, user.id_department, function(err, result){
+            //     if(err){
+            //         res.json({
+            //             error: err
+            //         })
+            //     }})
+                if(password == user.password){
+                    let token = jwt.sign({name: user.name}, 'AzQ,PI)0(',{expiresIn:'1h'})
+                    user._id = user.id
+                    res.json({
+                        message: 'login sucessfully',
+                        token,
+                        user
+                    })
+                }else{
+                    res.json({
+                        message: 'password does not match'
+                    })
+                }
+            // })
+        }else{
+            res.json({
+                message:'User not found !'
+            })
+        }
+    })
+}
+
+const registerAdmin = (req,res,next) =>{
+    bcrypt.hash(req.body.password,10, (err,hashedPass) =>{
+        if(err){
+            res.json({
+                error:err
+            })
+        }
+       
+        let admin = new Admin({
+            id:req.body.id,
+            username:req.body.username,
+            password:req.body.password
+        })
+        admin.save()
+        .then(admin =>{
+            res.json(admin)
+        })
+        .catch(err =>{
+            res.json({
+                message: 'An error occur'
+            })
+        })
+    })
+    
+}
+
 const update = (req, res, next) => {
 
     User.findOne({ "id": "fvbsfbv" })
@@ -124,4 +188,4 @@ const getUserOfDepart = (req, res, next) => {
       });
 }
 
-module.exports = {register,login , update, deleteUser, getUserOfDepart}
+module.exports = {register,login , update, deleteUser, getUserOfDepart, loginAdmin, registerAdmin}
